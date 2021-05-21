@@ -10,14 +10,13 @@
  * Please include in this file all your private URL endpoints.
  * 
  */
-
 import { Router } from 'express';
 import { safe } from './utils';
 import * as actions from './actions';
 
-// declare a new router to include all the endpoints
 const router = Router();
 
-router.get('/user', safe(actions.getUsers));
+router.get('/user', safe(actions.getUser));
+router.get('/todos/user/:id', safe(actions.getTodo));
 
 export default router;
