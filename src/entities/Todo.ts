@@ -4,7 +4,7 @@ import {
     BaseEntity
 } from 'typeorm';
 
-import { User } from "./user"
+import { User } from "./User"
 
 @Entity()
 export class Todo extends BaseEntity {
