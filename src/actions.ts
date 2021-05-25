@@ -19,8 +19,8 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
     const newtodoDefault = getRepository(Todo).create()
     newtodoDefault.label = "dale"
     newtodoDefault.done = false;
-  
-    
+
+
 
     const newUser = userRepo.create()
     newUser.first_name = req.body.first_name
@@ -33,61 +33,59 @@ export const createUser = async (req: Request, res: Response): Promise<Response>
 }
 
 export const getUsers = async (req: Request, resp: Response): Promise<Response> => {
-    const user = await getRepository(User).find({relations:["todo"]});
+    const user = await getRepository(User).find({ relations: ["todo"] });
     return resp.json(User);
 }
 
-
-
-
 export const getUser = async (req: Request, resp: Response): Promise<Response> => {
     const user = await getRepository(User).findOne(req.params.id);
-    if(!User) throw new Exception("el usuario no existe.");
+    if (!User) throw new Exception("el usuario no existe.");
     return resp.json(User);
 }
 
 export const updateUser = async (req: Request, resp: Response): Promise<Response> => {
     const user = await getRepository(User).findOne(req.params.id);
-    if(user) {getRepository (User).merge(user, req.body);
-    const results = await getRepository(User).save(User);
-return resp.json(results);
-}
-else {
-    return resp.status(404).json({msg: "el usuario no existe."});
-}
-}
-
-export const createTodo = async (req: Request, res: Response): Promise<Response> =>{
-if (!req.body.label) throw new Exception ("Se rompio :c")
-if (!req.body.done) throw new Exception ("Se rompio por 2 :c")
-
-const user = await getRepository(User).findOne({relations: ["Todo"], where: {id: req.params.id}});
-if (user){
-    const newTodo = new Todo();
-    newTodo.label = req.body.label
-    newTodo.done = false
-    user.todos.push(newTodo)
-    const results = await getRepository(User).save(user);
-    return res.json(results);
-}
-return res.json("todo no funciona");
+    if (user) {
+        getRepository(User).merge(user, req.body);
+        const results = await getRepository(User).save(User);
+        return resp.json(results);
+    }
+    else {
+        return resp.status(404).json({ msg: "el usuario no existe." });
+    }
 }
 
-export const getTodo = async (req: Request, res:Response): Promise<Response>=>{
-    const todo = await getRepository(Todo).find({relations:["user"]});
+export const createTodo = async (req: Request, res: Response): Promise<Response> => {
+    if (!req.body.label) throw new Exception("Se rompio :c")
+    if (!req.body.done) throw new Exception("Se rompio por 2 :c")
+
+    const user = await getRepository(User).findOne({ relations: ["Todo"], where: { id: req.params.id } });
+    if (user) {
+        const newTodo = new Todo();
+        newTodo.label = req.body.label
+        newTodo.done = false
+        user.todos.push(newTodo)
+        const results = await getRepository(User).save(user);
+        return res.json(results);
+    }
+    return res.json("todo no funciona");
+}
+
+export const getTodo = async (req: Request, res: Response): Promise<Response> => {
+    const todo = await getRepository(Todo).find({ relations: ["user"] });
     return res.json(todo);
-} 
+}
 
-export const getTodos = async (req: Request, res:Response): Promise<Response>=>{
-    const results = await getRepository(User).findOne({relations:["todo"], where:{id:req.params.id}});
+export const getTodos = async (req: Request, res: Response): Promise<Response> => {
+    const results = await getRepository(User).findOne({ relations: ["todo"], where: { id: req.params.id } });
     if (!results) throw new Exception("nel")
     return res.json(results.todos);
-} 
+}
 
-export const updateTodo = async (req:Request, res: Response): Promise<Response>=>{
+export const updateTodo = async (req: Request, res: Response): Promise<Response> => {
     const todosRepo = getRepository(Todo)
     const todo = await todosRepo.findOne(req.params.id);
-    if(!todo) throw new Exception("No funciona");
+    if (!todo) throw new Exception("No funciona");
     todosRepo.merge(todo, req.body);
     const results = await todosRepo.save(todo);
     return res.json(results);
