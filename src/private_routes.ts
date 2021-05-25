@@ -22,7 +22,7 @@ router.get('/user:id', safe(actions.updateUser));
 /*router.get('/todo/user:id', safe(actions.createTodo));
 router.get('/todos/user', safe(actions.getTodo));
 router.get('/todos/user/:id', safe(actions.getTodo));
-router.get('/todos/user/:id', safe(actions.updateTodo));
-router.get('/todos/user/:id', safe(actions.deleteUser));*/
+router.get('/todos/user/:id', safe(actions.updateTodo));*/
+router.get('/todos/user/:id', safe(actions.deleteUser));
 
 export default router;

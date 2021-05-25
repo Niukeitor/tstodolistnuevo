@@ -90,4 +90,14 @@ export const updateTodo = async (req: Request, res: Response): Promise<Response>
     const results = await todosRepo.save(todo);
     return res.json(results);
 }
-
+export const deleteUser = async (req: Request, res: Response): Promise<Response>=>{
+    const user = await getRepository(User).findOne(req.params.id);
+    if(!user){
+        return res.json({msg:"Usuario no existe"})
+    }
+    else {
+        const user = await getRepository(User).delete(req.params.id);
+    return res.json(user)
+    }
+    
+}
