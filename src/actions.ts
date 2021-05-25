@@ -73,5 +73,23 @@ if (user){
 return res.json("todo no funciona");
 }
 
+export const getTodo = async (req: Request, res:Response): Promise<Response>=>{
+    const todo = await getRepository(Todo).find({relations:["user"]});
+    return res.json(todo);
+} 
 
+export const getTodos = async (req: Request, res:Response): Promise<Response>=>{
+    const results = await getRepository(User).findOne({relations:["todo"], where:{id:req.params.id}});
+    if (!results) throw new Exception("nel")
+    return res.json(results.todos);
+} 
+
+export const updateTodo = async (req:Request, res: Response): Promise<Response>=>{
+    const todosRepo = getRepository(Todo)
+    const todo = await todosRepo.findOne(req.params.id);
+    if(!todo) throw new Exception("No funciona");
+    todosRepo.merge(todo, req.body);
+    const results = await todosRepo.save(todo);
+    return res.json(results);
+}
 
